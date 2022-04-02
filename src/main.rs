@@ -1,6 +1,11 @@
 use std::{env,fs, process, error::Error};
 
 
+#[derive(Debug)]
+enum Erros{
+    CommondNotFound
+}
+
 struct ProgramFile {
     syntaxt: String
 }
@@ -24,14 +29,14 @@ fn main() {
     
 
     if let Err(e) = parser(&program_file){
-        eprintln!("Syntax Error: {}", e);
+        eprintln!("Error: {:?}", e);
         process::exit(1);
     }
 
 }
 
 
-fn parser(line: &ProgramFile) -> Result<(), String> {
+fn parser(line: &ProgramFile) -> Result<(), Erros> {
 
     let line_as_byte = line.syntaxt.as_bytes();
     let syntax = &line.syntaxt.clone();
@@ -43,7 +48,7 @@ fn parser(line: &ProgramFile) -> Result<(), String> {
         }    
     }
     
-    Err(String::from("Commond Not Found!"))
+    Err(Erros::CommondNotFound)
 }
 
 fn print_commond(command: &str) {
