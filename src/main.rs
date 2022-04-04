@@ -1,4 +1,4 @@
-use std::{env,fs, process, error::Error , collections::HashMap};
+use std::{env,fs, process, error::Error};
 
 
 #[derive(Debug)]
@@ -28,7 +28,7 @@ fn main() {
     });
     
 
-    if let Err(e) = parser(&program_file){
+    if let Err(e) = line_reader(&program_file){
         eprintln!("Error: {:?}", e);
         process::exit(1);
     }
@@ -36,10 +36,20 @@ fn main() {
 }
 
 
-fn parser(line: &ProgramFile) -> Result<(), Erros> {
+fn line_reader(code: &ProgramFile) -> Result<(), Erros> {
 
-    let line_as_byte = line.syntaxt.as_bytes();
-    let syntax = &line.syntaxt.clone();
+    for line in code.syntaxt.lines() {
+        parser(line)?;
+    }
+
+    Ok(())
+
+}
+
+fn parser(line: &str) -> Result<(), Erros> {
+
+    let line_as_byte = line.as_bytes();
+    let syntax = &line.clone();
 
     for (i, &item) in line_as_byte.iter().enumerate(){
         if item == b' ' {
