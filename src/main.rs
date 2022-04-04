@@ -1,4 +1,4 @@
-use std::{env,fs, process, error::Error};
+use std::{env,fs, process, error::Error , collections::HashMap};
 
 
 #[derive(Debug)]
@@ -43,8 +43,10 @@ fn parser(line: &ProgramFile) -> Result<(), Erros> {
 
     for (i, &item) in line_as_byte.iter().enumerate(){
         if item == b' ' {
-            print_commond(&syntax[i+1..]);
-            return Ok(())
+            if &syntax[..i] == "print" {
+                print_commond(&syntax[i+1..]);
+                return Ok(())
+            }
         }    
     }
     
