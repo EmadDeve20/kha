@@ -61,7 +61,7 @@ fn get_list_of_lines(text: &String) -> Vec<String> {
 
 pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
     loop {
-        parser(&code.syntax[code.curent_line], &code.curent_line)?;
+        parser(&code.syntax[code.curent_line], &mut code.curent_line)?;
 
         code.curent_line += 1;
 
@@ -71,7 +71,7 @@ pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
     }
 }
 
-fn parser(text: &String, &line: &usize) -> Result<(), KhaInterpreterErro> {
+fn parser(text: &String, line: &mut usize) -> Result<(), KhaInterpreterErro> {
     if text.trim() == "exit" {
         commands::exit_command();
         return Ok(());
@@ -86,6 +86,12 @@ fn parser(text: &String, &line: &usize) -> Result<(), KhaInterpreterErro> {
         if item == b' ' {
             if &syntax[..i] == "print" {
                 commands::print_commond(&syntax[i + 1..]);
+                return Ok(());
+            }
+            // this is a standard command for kha
+            // this is better to save it here or command.rs file?
+            if &syntax[..i] == "go" {
+                *line = syntax[i+1 ..].parse::<usize>().unwrap() - 1;
                 return Ok(());
             }
         }
