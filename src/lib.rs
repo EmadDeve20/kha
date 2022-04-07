@@ -1,4 +1,5 @@
 use std::{error::Error, fs};
+
 mod commands;
 
 #[derive(Debug)]
@@ -30,35 +31,52 @@ impl KhaInterpreterErro {
 }
 
 pub struct ProgramFile {
-    syntaxt: String,
+    syntax: Vec<String>,
+    curent_line: usize,
+    line_total: usize,
 }
 
 impl ProgramFile {
     pub fn new(file_path: &String) -> Result<ProgramFile, Box<dyn Error>> {
-        let file = fs::read_to_string(file_path)?;
-
-        Ok(ProgramFile { syntaxt: file })
+        let text_file = fs::read_to_string(file_path)?;
+        let syntax = get_list_of_lines(&text_file);
+        let line_total = syntax.len();
+        Ok(ProgramFile {
+            syntax,
+            curent_line: 0,
+            line_total,
+        })
     }
 }
 
-pub fn line_reader(code: &ProgramFile) -> Result<(), KhaInterpreterErro> {
-    let mut curent_line: u32 = 1;
-    for line in code.syntaxt.lines() {
-        parser(line, &curent_line)?;
-        curent_line += 1;
+fn get_list_of_lines(text: &String) -> Vec<String> {
+    let mut list_of_lines: Vec<String> = Vec::new();
+    for line in text.lines() {
+        list_of_lines.push(line.trim_start().trim_end().to_string());
     }
 
-    Ok(())
+    // println!("{:#?}", list_of_lines);
+    list_of_lines
 }
 
-fn parser(text: &str, line: &u32) -> Result<(), KhaInterpreterErro> {
-    
+pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
+    loop {
+        parser(&code.syntax[code.curent_line], &code.curent_line)?;
+
+        code.curent_line += 1;
+
+        if code.curent_line >= code.line_total {
+            return Ok(());
+        }
+    }
+}
+
+fn parser(text: &String, &line: &usize) -> Result<(), KhaInterpreterErro> {
     if text.trim() == "exit" {
         commands::exit_command();
         return Ok(());
     }
-    
-    let line_as_byte = text.clone().as_bytes();
+    let line_as_byte = text.as_bytes();
     let syntax = &text.clone();
 
     for (i, &item) in line_as_byte.iter().enumerate() {
