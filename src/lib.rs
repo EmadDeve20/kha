@@ -61,17 +61,20 @@ fn get_list_of_lines(text: &String) -> Vec<String> {
 
 pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
     loop {
-        parser(&code.syntax[code.curent_line], &mut code.curent_line)?;
-
-        code.curent_line += 1;
-
         if code.curent_line >= code.line_total {
             return Ok(());
         }
+        parser(
+            &code.syntax[code.curent_line],
+            &mut code.curent_line,
+            &code.line_total,
+        )?;
+
+        code.curent_line += 1;
     }
 }
 
-fn parser(text: &String, line: &mut usize) -> Result<(), KhaInterpreterErro> {
+fn parser(text: &String, line: &mut usize, max_line: &usize) -> Result<(), KhaInterpreterErro> {
     if text.trim() == "exit" {
         commands::exit_command();
         return Ok(());
@@ -90,8 +93,12 @@ fn parser(text: &String, line: &mut usize) -> Result<(), KhaInterpreterErro> {
             }
             // this is a standard command for kha
             // this is better to save it here or command.rs file?
+            // if the programmer types a negative number front of the go command, rust will get a error
+            //To correct the error in this case, we return a number greater than the whole line until the interpreter snake ends. 
             if &syntax[..i] == "go" {
-                *line = syntax[i+1 ..].parse::<usize>().unwrap() - 1;
+                *line = syntax[i + 1..]
+                    .parse::<usize>()
+                    .unwrap_or_else(|_| max_line + 1);
                 return Ok(());
             }
         }
