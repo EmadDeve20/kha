@@ -1,7 +1,6 @@
 use std::{error::Error, fs};
 mod commands;
 
-
 #[derive(Debug)]
 pub enum ErroType {
     CommondNotFound,
@@ -42,8 +41,6 @@ impl ProgramFile {
     }
 }
 
-
-
 pub fn line_reader(code: &ProgramFile) -> Result<(), KhaInterpreterErro> {
     let mut curent_line: u32 = 1;
     for line in code.syntaxt.lines() {
@@ -55,6 +52,12 @@ pub fn line_reader(code: &ProgramFile) -> Result<(), KhaInterpreterErro> {
 }
 
 fn parser(text: &str, line: &u32) -> Result<(), KhaInterpreterErro> {
+    
+    if text == "exit" {
+        commands::exit_command();
+        return Ok(());
+    }
+    
     let line_as_byte = text.clone().as_bytes();
     let syntax = &text.clone();
 
@@ -65,6 +68,10 @@ fn parser(text: &str, line: &u32) -> Result<(), KhaInterpreterErro> {
         if item == b' ' {
             if &syntax[..i] == "print" {
                 commands::print_commond(&syntax[i + 1..]);
+                return Ok(());
+            }
+            if &syntax[..i] == "exit" {
+                commands::exit_command();
                 return Ok(());
             }
         }
