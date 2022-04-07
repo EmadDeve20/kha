@@ -53,7 +53,7 @@ pub fn line_reader(code: &ProgramFile) -> Result<(), KhaInterpreterErro> {
 
 fn parser(text: &str, line: &u32) -> Result<(), KhaInterpreterErro> {
     
-    if text == "exit" {
+    if text.trim() == "exit" {
         commands::exit_command();
         return Ok(());
     }
@@ -68,10 +68,6 @@ fn parser(text: &str, line: &u32) -> Result<(), KhaInterpreterErro> {
         if item == b' ' {
             if &syntax[..i] == "print" {
                 commands::print_commond(&syntax[i + 1..]);
-                return Ok(());
-            }
-            if &syntax[..i] == "exit" {
-                commands::exit_command();
                 return Ok(());
             }
         }
