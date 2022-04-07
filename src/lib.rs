@@ -43,7 +43,7 @@ impl ProgramFile {
         let line_total = syntax.len();
         Ok(ProgramFile {
             syntax,
-            curent_line: 0,
+            curent_line: 1,
             line_total,
         })
     }
@@ -51,6 +51,8 @@ impl ProgramFile {
 
 fn get_list_of_lines(text: &String) -> Vec<String> {
     let mut list_of_lines: Vec<String> = Vec::new();
+    list_of_lines.push("".to_string());
+
     for line in text.lines() {
         list_of_lines.push(line.trim_start().trim_end().to_string());
     }
@@ -69,8 +71,6 @@ pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
             &mut code.curent_line,
             &code.line_total,
         )?;
-
-        code.curent_line += 1;
     }
 }
 
@@ -84,21 +84,26 @@ fn parser(text: &String, line: &mut usize, max_line: &usize) -> Result<(), KhaIn
 
     for (i, &item) in line_as_byte.iter().enumerate() {
         if item == b'#' {
+            *line += 1;
             return Ok(());
         }
         if item == b' ' {
             if &syntax[..i] == "print" {
                 commands::print_commond(&syntax[i + 1..]);
+                *line += 1;
                 return Ok(());
             }
             // this is a standard command for kha
             // this is better to save it here or command.rs file?
             // if the programmer types a negative number front of the go command, rust will get a error
-            //To correct the error in this case, we return a number greater than the whole line until the interpreter snake ends. 
+            //To correct the error in this case, we return a number greater than the whole line until the interpreter snake ends.
             if &syntax[..i] == "go" {
                 *line = syntax[i + 1..]
                     .parse::<usize>()
                     .unwrap_or_else(|_| max_line + 1);
+                if *line == 0 {
+                    *line = max_line + 1
+                }
                 return Ok(());
             }
         }
