@@ -93,17 +93,8 @@ fn parser(text: &String, line: &mut usize, max_line: &usize) -> Result<(), KhaIn
                 *line += 1;
                 return Ok(());
             }
-            // this is a standard command for kha
-            // this is better to save it here or command.rs file?
-            // if the programmer types a negative number front of the go command, rust will get a error
-            //To correct the error in this case, we return a number greater than the whole line until the interpreter snake ends.
             if &syntax[..i] == "go" {
-                *line = syntax[i + 1..]
-                    .parse::<usize>()
-                    .unwrap_or_else(|_| max_line + 1);
-                if *line == 0 {
-                    *line = max_line + 1
-                }
+                commands::go_command(line, &syntax[i + 1..].to_string(), &max_line);
                 return Ok(());
             }
         }
