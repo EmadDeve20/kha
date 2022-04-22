@@ -1,4 +1,4 @@
-use std::{error::Error, fs};
+use std::{env, error::Error, fs, thread, time::Duration};
 
 mod commands;
 
@@ -30,21 +30,30 @@ impl KhaInterpreterErro {
     }
 }
 
-pub struct ProgramFile {
+pub struct ProgramFileConfig {
     syntax: Vec<String>,
     curent_line: usize,
     line_total: usize,
+    delay: u64,
 }
 
-impl ProgramFile {
-    pub fn new(file_path: &String) -> Result<ProgramFile, Box<dyn Error>> {
+impl ProgramFileConfig {
+    pub fn new(mut args: env::Args) -> Result<ProgramFileConfig, Box<dyn Error>> {
+        args.next();
+        let file_path = args.nth(0).unwrap();
         let text_file = fs::read_to_string(file_path)?;
+
+        let delay: u64 = match args.next() {
+            Some(arg) => arg.trim().parse::<u64>().unwrap_or_else(|_| 1),
+            None => 0,
+        };
         let syntax = get_list_of_lines(&text_file);
         let line_total = syntax.len();
-        Ok(ProgramFile {
+        Ok(ProgramFileConfig {
             syntax,
             curent_line: 1,
             line_total,
+            delay,
         })
     }
 }
@@ -61,7 +70,7 @@ fn get_list_of_lines(text: &String) -> Vec<String> {
     list_of_lines
 }
 
-pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
+pub fn line_reader(code: &mut ProgramFileConfig) -> Result<(), KhaInterpreterErro> {
     loop {
         if code.curent_line >= code.line_total {
             return Ok(());
@@ -71,6 +80,7 @@ pub fn line_reader(code: &mut ProgramFile) -> Result<(), KhaInterpreterErro> {
             &mut code.curent_line,
             &code.line_total,
         )?;
+        thread::sleep(Duration::from_secs(code.delay));
     }
 }
 
