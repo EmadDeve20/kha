@@ -1,12 +1,8 @@
+use kha::{line_reader, ProgramFileConfig};
 use std::{env, process};
-use kha::{ProgramFile, line_reader};
-
-
 
 fn main() {
-    let file_path = env::args().nth(1).unwrap();
-
-    let mut program_file = ProgramFile::new(&file_path).unwrap_or_else(|err| {
+    let mut program_file = ProgramFileConfig::new(env::args()).unwrap_or_else(|err| {
         eprintln!("file error: {}", err);
         process::exit(1);
     });
