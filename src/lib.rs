@@ -115,3 +115,37 @@ fn parser(text: &String, line: &mut usize, max_line: &usize) -> Result<(), KhaIn
         text.to_string(),
     ))
 }
+
+fn kha_spliter<'a>(text: &'a str) -> Vec<&'a str> {
+
+    let text_as_bytes = text.as_bytes();
+
+    let mut result:Vec<&str> = Vec::new();
+
+    for (index, &item) in text_as_bytes.into_iter().enumerate() {
+        if item == b' '{
+            result.push(&text[..index-1].trim_start());
+            result.push(&text[index+1..].trim_end());
+            return result
+        } 
+        else if item == b'=' {
+            result.push(&text[..index-1].trim_start());
+            result.push("=");
+            result.push(&text[index+1..].trim_end());
+            return result
+        }
+    }
+
+    vec![""]
+}
+
+fn lexer<'a>(text: &'a str) -> Vec<Vec<&'a str>> {
+    
+    let mut lex = Vec::new();
+
+    for t in text.lines(){
+        lex.push(kha_spliter(&text));
+    }
+
+    lex
+}
