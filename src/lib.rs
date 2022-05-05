@@ -116,7 +116,8 @@ fn parser(text: &String, line: &mut usize, max_line: &usize) -> Result<(), KhaIn
     ))
 }
 
-fn kha_spliter<'a>(text: &'a str) -> Vec<&'a str> {
+// this function is special string splitter for kha
+fn kha_splitter<'a>(text: &'a str) -> Vec<&'a str> {
 
     let text_as_bytes = text.as_bytes();
 
@@ -144,7 +145,7 @@ fn lexer<'a>(text: &'a str) -> Vec<Vec<&'a str>> {
     let mut lex = Vec::new();
 
     for t in text.lines(){
-        lex.push(kha_spliter(&text));
+        lex.push(kha_splitter(&text));
     }
 
     lex
