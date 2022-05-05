@@ -125,14 +125,14 @@ fn kha_splitter<'a>(text: &'a str) -> Vec<&'a str> {
 
     for (index, &item) in text_as_bytes.into_iter().enumerate() {
         if item == b' '{
-            result.push(&text[..index-1].trim_start());
-            result.push(&text[index+1..].trim_end());
+            result.push(&text[..index-1].trim());
+            result.push(&text[index+1..].trim());
             return result
         } 
         else if item == b'=' {
-            result.push(&text[..index-1].trim_start());
+            result.push(&text[..index-1].trim());
             result.push("=");
-            result.push(&text[index+1..].trim_end());
+            result.push(&text[index+1..].trim());
             return result
         }
     }
