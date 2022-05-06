@@ -152,3 +152,32 @@ fn lexer<'a>(text: &'a str) -> Vec<Vec<&'a str>> {
 
     lex
 }
+
+//TODO: We must change this name of function to 'parser'
+fn parseer<'a>(lex: Vec<Vec<&'a str>>) -> Vec<Vec<&'a str>> {
+    let mut parse: Vec<Vec<&'a str>> = Vec::new();
+
+    for list in lex {
+        let mut p = Vec::new();
+
+        if list.len() == 3 {
+            if list[1] == "=" {
+                p.push("var");
+                p.push(list[0]);
+                p.push(list[2]);
+            }
+        }
+        if list.len() == 2 {
+            p.push("command");
+            p.push(list[0]);
+            p.push(list[1]);
+        } else if list.len() == 1 {
+            p.push("command");
+            p.push(list[0]);
+        }
+
+        parse.push(p);
+    }
+
+    parse
+}
