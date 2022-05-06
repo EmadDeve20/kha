@@ -1,4 +1,4 @@
-use std::{env, error::Error, fs, thread, time::Duration, vec};
+use std::{env, error::Error, fs, thread, time::Duration, vec, fmt::Display};
 
 mod commands;
 
@@ -196,5 +196,26 @@ fn evaluation<'a>(parse: Vec<Vec<&'a str>>) {
                 commands::exit_command()
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::vec;
+
+    use crate::lexer;
+
+    #[test]
+    fn lexter_test() {
+        let test1 = vec!["a", "=", "test"];
+        let test2 = vec!["b", "=", "1"];
+        let test3 = vec!["print", "hello world"];
+        let test4 = vec!["exit"];
+        let test5 = vec!["go", "1"];
+        
+        todo!();
+        //we must create and impl PartialEq for Vec<&'a str>
+        // assert_eq!(lexer("a=   test"), test1);
+    
     }
 }
