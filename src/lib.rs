@@ -137,7 +137,7 @@ fn kha_splitter<'a>(text: &'a str) -> Vec<&'a str> {
         }
     }
 
-    vec![""]
+    vec![&text]
 }
 
 fn lexer<'a>(text: &'a str) -> Vec<Vec<&'a str>> {
