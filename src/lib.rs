@@ -192,11 +192,10 @@ fn evaluation<'a>(parse: Vec<Vec<&'a str>>) {
         if vec.len() == 2 {
             if vec[1] == "exit" {
                 commands::exit_command();
-                println!("true");
             }
         }
 
-        println!("{:#?}", vec);
+        // println!("{:#?}", vec);
     }
 }
 
