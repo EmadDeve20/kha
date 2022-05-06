@@ -193,6 +193,9 @@ fn evaluation<'a>(parse: Vec<Vec<&'a str>>) {
             if vec[1] == "exit" {
                 commands::exit_command();
             }
+            if vec[1] == "clear" {
+                commands::clear_command();
+            }
         }
 
         // println!("{:#?}", vec);
