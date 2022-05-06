@@ -1,4 +1,4 @@
-use std::{env, error::Error, fs, thread, time::Duration, vec, fmt::Display};
+use std::{env, error::Error, fmt::Display, fs, thread, time::Duration, vec};
 
 mod commands;
 
@@ -182,21 +182,26 @@ fn parseer<'a>(lex: Vec<Vec<&'a str>>) -> Vec<Vec<&'a str>> {
     parse
 }
 
-
 fn evaluation<'a>(parse: Vec<Vec<&'a str>>) {
-
-    for p in parse {
-        if p.len() == 2 {
-            if p[1] == "print" {
-                commands::print_commond(p[2]);
-            } 
-        }
-        if p.len() == 1 {
-            if p[1] == "exit"{
-                commands::exit_command()
+    for (_, vec) in parse.iter().enumerate() {
+        if vec.len() == 3 {
+            if vec[1] == "print" {
+                commands::print_commond(vec[2]);
             }
         }
+        if vec.len() == 2 {
+            if vec[1] == "exit" {
+                commands::exit_command();
+                println!("true");
+            }
+        }
+
+        println!("{:#?}", vec);
     }
+}
+
+pub fn get_plain_text(plain_text: String) {
+    evaluation(parseer(lexer(&plain_text[..])))
 }
 
 #[cfg(test)]
@@ -212,10 +217,8 @@ mod tests {
         let test3 = vec!["print", "hello world"];
         let test4 = vec!["exit"];
         let test5 = vec!["go", "1"];
-        
         todo!();
         //we must create and impl PartialEq for Vec<&'a str>
         // assert_eq!(lexer("a=   test"), test1);
-    
     }
 }
