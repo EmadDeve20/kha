@@ -147,7 +147,7 @@ fn lexer<'a>(text: &'a str) -> Vec<Vec<&'a str>> {
     let mut lex = Vec::new();
 
     for t in text.lines() {
-        lex.push(kha_splitter(&text));
+        lex.push(kha_splitter(t));
     }
 
     lex
