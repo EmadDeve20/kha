@@ -181,3 +181,20 @@ fn parseer<'a>(lex: Vec<Vec<&'a str>>) -> Vec<Vec<&'a str>> {
 
     parse
 }
+
+
+fn evaluation<'a>(parse: Vec<Vec<&'a str>>) {
+
+    for p in parse {
+        if p.len() == 2 {
+            if p[1] == "print" {
+                commands::print_commond(p[2]);
+            } 
+        }
+        if p.len() == 1 {
+            if p[1] == "exit"{
+                commands::exit_command()
+            }
+        }
+    }
+}
