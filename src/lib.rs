@@ -1,4 +1,4 @@
-use std::{env, error::Error, fs, thread, time::Duration};
+use std::{env, error::Error, fs, thread, time::Duration, vec};
 
 mod commands;
 
@@ -118,22 +118,25 @@ fn parser(text: &String, line: &mut usize, max_line: &usize) -> Result<(), KhaIn
 
 // this function is special string splitter for kha
 fn kha_splitter<'a>(text: &'a str) -> Vec<&'a str> {
-
     let text_as_bytes = text.as_bytes();
 
-    let mut result:Vec<&str> = Vec::new();
+    // this character is a comment so we return an empty string
+    if text_as_bytes[0] == b'#' {
+        return vec![""];
+    }
+
+    let mut result: Vec<&str> = Vec::new();
 
     for (index, &item) in text_as_bytes.into_iter().enumerate() {
-        if item == b' '{
-            result.push(&text[..index-1].trim());
-            result.push(&text[index+1..].trim());
-            return result
-        } 
-        else if item == b'=' {
-            result.push(&text[..index-1].trim());
+        if item == b' ' {
+            result.push(&text[..index].trim());
+            result.push(&text[index + 1..].trim());
+            return result;
+        } else if item == b'=' {
+            result.push(&text[..index].trim());
             result.push("=");
-            result.push(&text[index+1..].trim());
-            return result
+            result.push(&text[index + 1..].trim());
+            return result;
         }
     }
 
@@ -141,10 +144,9 @@ fn kha_splitter<'a>(text: &'a str) -> Vec<&'a str> {
 }
 
 fn lexer<'a>(text: &'a str) -> Vec<Vec<&'a str>> {
-    
     let mut lex = Vec::new();
 
-    for t in text.lines(){
+    for t in text.lines() {
         lex.push(kha_splitter(&text));
     }
 
