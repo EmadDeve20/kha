@@ -1,4 +1,4 @@
-use std::{env, error::Error, fmt::Display, fs, thread, time::Duration, vec};
+use std::{env, error::Error,fs, thread, time::Duration, vec};
 
 mod commands;
 
