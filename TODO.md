@@ -1,0 +1,4 @@
+- [ ] try to set a text variable and number variable 
+- [ ] create the if, else and elif commands
+- [ ] create kha error in commands if the code is wrong
+- [ ] create the input_txt and input_num commands to get the text variable and number variable
