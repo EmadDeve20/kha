@@ -1,4 +1,5 @@
 use std::process::{exit, Command};
+use std::{thread, time::Duration};
 use std::env::consts::OS;
 
 pub fn print_commond(command: &str) {
@@ -22,4 +23,9 @@ pub fn clear_command(){
     } else {
         Command::new("clear").spawn().expect("Command Not Found");
     }
+}
+
+pub fn sleep_command(time_to_second: &String){
+    let time_to_secoud:u64 = time_to_second.trim().parse().unwrap();
+    thread::sleep(Duration::from_secs(time_to_secoud));
 }
