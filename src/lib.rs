@@ -223,6 +223,11 @@ fn evaluation(
             *curent_line += 1;
             return Ok(());
         }
+        if parse[1] == "sleep".to_string() {
+            commands::sleep_command(&parse[2]);
+            *curent_line += 1;
+            return Ok(());
+        }
     }
     // println!("{:#?}", vec);
     let text_in_line = &parse[1];
@@ -251,3 +256,4 @@ mod tests {
         // assert_eq!(lexer("a=   test"), test1);
     }
 }
+    
