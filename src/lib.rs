@@ -158,7 +158,6 @@ fn lexer(syntax: Vec<String>) -> Vec<Vec<String>> {
     lex
 }
 
-//TODO: We must change this name of function to 'parser'
 fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
     let mut parse: Vec<Vec<String>> = Vec::new();
 
