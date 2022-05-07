@@ -8,4 +8,5 @@ print bla bla bla
 print bla bla bla
 print ...
 print what do you see?
+sleep 1
 clear
