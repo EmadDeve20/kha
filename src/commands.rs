@@ -1,6 +1,5 @@
-use std::process::{exit, Command};
+use std::process::exit;
 use std::{thread, time::Duration};
-use std::env::consts::OS;
 
 pub fn print_commond(command: &str) {
     println!("{}", command);
