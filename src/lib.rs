@@ -126,13 +126,16 @@ pub fn online_interpreter(code: &mut ProgramFileConfig) -> Result<(), KhaInterpr
 fn kha_splitter(text: String) -> Vec<String> {
     let text_as_bytes = text.as_bytes();
 
+    // this '#' character is a comment
+    // if this line is empty or is started with the comment character this function returns a vector with the comment value
+    if text_as_bytes.len() == 0 || text_as_bytes[0] == b'#' {
+        return vec![String::from("comment")];
+    }
+
     let mut result: Vec<String> = Vec::new();
 
     for (index, &item) in text_as_bytes.into_iter().enumerate() {
-        // this character is a comment so we return an empty string
-        if item == b'#' {
-            return vec![String::from("comment")];
-        }
+        
         if item == b' ' {
             result.push(text[..index].trim().to_string());
             result.push(text[index + 1..].trim().to_string());
