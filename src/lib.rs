@@ -228,14 +228,16 @@ fn evaluation(
             *curent_line += 1;
             return Ok(());
         }
+            let text_in_line = &parse[1];
+            return Err(KhaInterpreterErro::new(
+            ErroType::CommondNotFound,
+            *curent_line,
+            text_in_line.to_string(),
+        ))
     }
-    // println!("{:#?}", vec);
-    let text_in_line = &parse[1];
-    Err(KhaInterpreterErro::new(
-        ErroType::CommondNotFound,
-        *curent_line,
-        text_in_line.to_string(),
-    ))
+   
+    Ok(())
+    
 }
 
 #[cfg(test)]
