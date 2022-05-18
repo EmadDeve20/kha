@@ -30,3 +30,10 @@ This command clears your terminal environment.
 example:
 
 ```clear```
+
+# sleep command
+
+The recipe is to wait for the code to run for as long as you want. This time is calculated in seconds.
+For example, if we want to stop executing code for 5 seconds:
+‍‍‍‍‍```sleep 5```
+
