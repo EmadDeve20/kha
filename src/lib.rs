@@ -204,6 +204,10 @@ fn evaluation(
         return Ok(());
     }
 
+    if parse[0] == "comment".to_string() {
+        return Ok(())
+    }
+
     thread::sleep(Duration::from_secs(*delay));
 
     if parse[0] == "command".to_string() {
