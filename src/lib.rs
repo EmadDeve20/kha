@@ -183,7 +183,7 @@ fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
             p.push(String::from("command"));
             p.push(list[0].to_string());
         }
-        if list.len() == 1 && (list[0] == "comment".to_string() || list[0] == "") {
+        else {
             p.push("comment".to_string());
         }
 
