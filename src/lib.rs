@@ -143,8 +143,14 @@ fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
         let mut p: Vec<String> = Vec::new();
 
         if list.len() == 3 {
-            if list[1] == "=" {                
-                p.push(String::from("var"));
+            if list[1] == "=" {             
+                let re = Regex::new("(^\"|')|[[:alpha:]]+").unwrap();
+                
+                if re.is_match(&list[2]) {
+                    p.push(String::from("text_var"));
+                } else {
+                    p.push(String::from("num_var"));
+                }                
                 p.push(list[0].to_string());
                 p.push(list[2].to_string());
             }
@@ -166,7 +172,7 @@ fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
         parse.push(p);
     }
 
-    // println!("{:#?}", parse);
+    println!("{:#?}", parse);
     parse
 }
 
