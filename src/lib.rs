@@ -1,5 +1,6 @@
 use std::{env, error::Error, fs, thread, time::Duration, vec};
 use crate::kha_error::{ErroType, KhaInterpreterErro};
+use regex::Regex;
 
 mod commands;
 mod kha_error;
@@ -142,7 +143,7 @@ fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
         let mut p: Vec<String> = Vec::new();
 
         if list.len() == 3 {
-            if list[1] == "=" {
+            if list[1] == "=" {                
                 p.push(String::from("var"));
                 p.push(list[0].to_string());
                 p.push(list[2].to_string());
@@ -157,13 +158,15 @@ fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
             p.push(String::from("command"));
             p.push(list[0].to_string());
         }
-        else {
+        if list.len() == 1 && list[0] == "comment".to_string() {
+            println!("{}", list[0]);
             p.push("comment".to_string());
         }
 
         parse.push(p);
     }
 
+    // println!("{:#?}", parse);
     parse
 }
 
