@@ -228,18 +228,25 @@ fn evaluation(
 mod tests {
     use std::vec;
 
-    use crate::lexer;
+    use crate::kha_splitter;
+
 
     #[test]
-    fn lexter_test() {
-        let test1 = vec!["a", "=", "test"];
-        let test2 = vec!["b", "=", "1"];
-        let test3 = vec!["print", "hello world"];
-        let test4 = vec!["exit"];
-        let test5 = vec!["go", "1"];
-        todo!();
-        //we must create and impl PartialEq for Vec<&'a str>
-        // assert_eq!(lexer("a=   test"), test1);
+    fn standard_length_index_of_lexer() {
+        let comment = "# this is comment! right?".to_string();
+        let print_command = "print hi emad :D".to_string();
+        let exit_command = "exit".to_string();
+        let empty_line = "".to_string();
+        let text_value = "txt= 1+1abc".to_string();
+        let number_value = "num= 1+1".to_string();
+
+
+        assert_eq!(kha_splitter(comment).len(), 1);
+        assert_eq!(kha_splitter(print_command).len(), 2);
+        assert_eq!(kha_splitter(exit_command).len(), 1);
+        assert_eq!(kha_splitter(empty_line).len(), 1);
+        assert_eq!(kha_splitter(text_value).len(), 3);
+        assert_eq!(kha_splitter(number_value).len(), 3);
     }
 }
     
