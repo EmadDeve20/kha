@@ -232,9 +232,8 @@ fn evaluation(
 
 #[cfg(test)]
 mod tests {
-    use std::vec;
 
-    use crate::kha_splitter;
+    use crate::{kha_splitter, lexer, parser};
 
 
     #[test]
@@ -254,5 +253,22 @@ mod tests {
         assert_eq!(kha_splitter(text_value).len(), 3);
         assert_eq!(kha_splitter(number_value).len(), 3);
     }
+
+    fn standard_length_of_parser() {
+
+        let comment = ["# this is comment! right?".to_string()];
+        let print_command = "print hi emad :D".to_string();
+        let exit_command = "exit".to_string();
+        let empty_line = "".to_string();
+        let text_value = "txt= 1+1abc".to_string();
+        let number_value = "num= 1+1".to_string();
+
+        // let source_code = vec![comment, print_command, exit_command, empty_line, text_value, number_value];
+
+        let lex = lexer(comment);
+        // assert_eq!(parser(lexer(&comment)), 1);
+
+    }
+
 }
     
