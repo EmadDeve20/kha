@@ -1,5 +1,5 @@
-use kha::{interpreter, ProgramFileConfig, new_empy_programing_config, online_interpreter};
-use std::{env, io, process};
+use kha::{interpreter, ProgramFileConfig};
+use std::{env, process};
 
 fn main() {
     if env::args().len() == 1 {
