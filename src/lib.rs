@@ -6,7 +6,7 @@ mod commands;
 mod kha_error;
 
 pub struct ProgramFileConfig {
-    syntax: Vec<String>,
+    syntax_tree: Vec<Vec<String>>,
     curent_line: usize,
     line_total: usize,
     delay: u64,
@@ -23,22 +23,23 @@ impl ProgramFileConfig {
             None => 0,
         };
 
-        let syntax = get_list_of_lines(&text_file);
-        let line_total = syntax.len();
+        let syntax_tree = parser(lexer(push_empty_line(text_file)));
+        let line_total = syntax_tree.len();
         Ok(ProgramFileConfig {
-            syntax,
+            syntax_tree,
             curent_line: 1,
             line_total,
             delay,
         })
     }
 
-    pub fn new_line(&mut self, new_text: String) -> &Self {
-        self.syntax.push(new_text);
-        self.line_total += 1;
+    //
+    // pub fn new_line(&mut self, new_text: String) -> &Self {
+    //     self.syntax_tree.push(parser(lexer(new_text)));
+    //     self.line_total += 1;
 
-        self
-    }
+    //     self
+    // }
 }
 
 pub fn new_empy_programing_config() -> ProgramFileConfig {
@@ -46,11 +47,11 @@ pub fn new_empy_programing_config() -> ProgramFileConfig {
         delay: 0,
         curent_line: 0,
         line_total: 1_000_000,
-        syntax: vec![],
+        syntax_tree: vec![vec!["".to_string()]],
     }
 }
 
-fn get_list_of_lines(text: &String) -> Vec<String> {
+fn push_empty_line(text: String) -> Vec<String> {
     let mut list_of_lines: Vec<String> = Vec::new();
     // I pushed an empty string in the first index because we start at one line and we have no zero line in plain text
     list_of_lines.push("".to_string());
@@ -64,14 +65,12 @@ fn get_list_of_lines(text: &String) -> Vec<String> {
 }
 
 pub fn interpreter(code: &mut ProgramFileConfig) -> Result<(), KhaInterpreterErro> {
-    let lex = lexer(code.syntax.clone());
-    let parse = parser(lex);
     loop {
         if code.curent_line >= code.line_total {
             return Ok(());
         }
 
-        let parse = &parse[code.curent_line];
+        let parse = &code.syntax_tree[code.curent_line];
 
         evaluation(
             parse.to_vec(),
@@ -83,9 +82,7 @@ pub fn interpreter(code: &mut ProgramFileConfig) -> Result<(), KhaInterpreterErr
 }
 
 pub fn online_interpreter(code: &mut ProgramFileConfig) -> Result<(), KhaInterpreterErro> {
-    let lex = lexer(code.syntax.clone());
-    let parse = parser(lex);
-    let parse = &parse[code.curent_line];
+    let parse = &code.syntax_tree[code.curent_line];
 
     evaluation(
         parse.to_vec(),
@@ -165,14 +162,13 @@ fn parser(lex: Vec<Vec<String>>) -> Vec<Vec<String>> {
             p.push(list[0].to_string());
         }
         if list.len() == 1 && list[0] == "comment".to_string() {
-            println!("{}", list[0]);
             p.push("comment".to_string());
         }
 
         parse.push(p);
     }
 
-    println!("{:#?}", parse);
+    // println!("{:#?}", parse);
     parse
 }
 
@@ -254,19 +250,26 @@ mod tests {
         assert_eq!(kha_splitter(number_value).len(), 3);
     }
 
+    #[test]
     fn standard_length_of_parser() {
 
-        let comment = ["# this is comment! right?".to_string()];
-        let print_command = "print hi emad :D".to_string();
-        let exit_command = "exit".to_string();
-        let empty_line = "".to_string();
-        let text_value = "txt= 1+1abc".to_string();
-        let number_value = "num= 1+1".to_string();
+        let comment = vec!["# this is comment! right?".to_string()];
+        let print_command = vec!["print hi emad :D".to_string()];
+        let exit_command = vec!["exit".to_string()];
+        let empty_line = vec!["".to_string()];
+        let text_value = vec!["txt= 1+1abc".to_string()];
+        let number_value = vec!["num= 1+1".to_string()];
 
         // let source_code = vec![comment, print_command, exit_command, empty_line, text_value, number_value];
 
-        let lex = lexer(comment);
-        // assert_eq!(parser(lexer(&comment)), 1);
+        assert_eq!(parser(lexer(comment))[0].len(), 1);
+        assert_eq!(parser(lexer(print_command))[0].len(), 3);
+        assert_eq!(parser(lexer(exit_command))[0].len(), 2);
+        assert_eq!(parser(lexer(empty_line))[0].len(), 1);
+        assert_eq!(parser(lexer(text_value))[0].len(), 3);
+        assert_eq!(parser(lexer(number_value))[0].len(), 3);
+
+
 
     }
 
