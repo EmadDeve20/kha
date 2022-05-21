@@ -18,18 +18,19 @@ fn main() {
 }
 
 fn run_online_interpreter() {
-    let mut code = new_empy_programing_config();
-    loop {
-        // TODO: is why this [In] can not print first? we must fix it
-        // println!("[In]: ");
-        let mut text = String::new();
-        io::stdin().read_line(&mut text).expect("sonething wrong!");
-        code.new_line(text);
-        if let Err(e) = online_interpreter(&mut code) {
-            eprintln!("{}", e.get_format_message());
-            continue;
-        }
-        // print!("[OutPut]: ");
-        // get_plain_text(text);
-    }
+    todo!()
+    // let mut code = new_empy_programing_config();
+    // loop {
+    //     // TODO: is why this [In] can not print first? we must fix it
+    //     // println!("[In]: ");
+    //     let mut text = String::new();
+    //     io::stdin().read_line(&mut text).expect("sonething wrong!");
+    //     code.new_line(text);
+    //     if let Err(e) = online_interpreter(&mut code) {
+    //         eprintln!("{}", e.get_format_message());
+    //         continue;
+    //     }
+    //     // print!("[OutPut]: ");
+    //     // get_plain_text(text);
+    // }
 }
